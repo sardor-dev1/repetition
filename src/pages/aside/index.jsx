@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../../context/Context";
 
-export default function index() {
+export default function index({
+  selectedBrand,
+  setSelectedBrand,
+  setSelectedColor,
+  selectedColor,
+}) {
   const [colorLoading, setColorLoading] = useState(false);
   const [brandLoading, setBrandLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { state, dispatch } = useContext(Context);
   const { colors, brands } = state;
-  const [activeColor, setActiveColor] = useState("");
 
   useEffect(() => {
     async function fetchBrands() {
@@ -17,7 +21,6 @@ export default function index() {
         const response = await fetch(
           "https://headphones-server.onrender.com/brands"
         );
-
         if (!response.ok) {
           throw new Error("Error fetching colors");
         }
@@ -54,41 +57,66 @@ export default function index() {
         setColorLoading(false);
       }
     }
-
     fetchColors();
   }, []);
+
   return (
-    <div className="grid col-span-2 max-w-[100%] min-w-[300px] border-solid border-[1.5px] border-black">
-      <div>
-        <h2>Brands</h2>
-        {brandLoading ? (
-          <div>Loading...</div>
-        ) : (
-          brands.map((brand, index) => (
-            <li key={index} className="list-none">
-              {brand}
+    <div className="px-3">
+      <div className="border-b-2 py-3">
+        <h2 className="text-center font-semibold text-[18px]">Brands</h2>
+        <ul className="flex flex-col gap-1">
+          {brands?.map((brand) => (
+            <li key={`${brand.id}`} className="list-none ">
+              <input
+                className="mr-1 cursor-pointer"
+                type="radio"
+                name={"brand"}
+                id={brand}
+                onChange={() => setSelectedBrand(brand)}
+                checked={selectedBrand === brand}
+              />
+              <label htmlFor={brand}>{brand}</label>
             </li>
-          ))
-        )}
+          ))}
+        </ul>
+        <div className="w-full flex justify-center py-2">
+          <button
+            className="py-1 px-2 border-black border-[1.5px] rounded-md border-solid"
+            onClick={() => setSelectedBrand("")}
+          >
+            Reset
+          </button>
+        </div>
       </div>
       <div>
-        <h2>Colors</h2>
-        <ul className="px-[30px]">
-          {colors.map((color, index) => {
+        <h2 className="text-center font-semibold text-[18px]">Colors</h2>
+        <ul className="">
+          {colors.map((color) => {
             return (
-              <li key={index} className="list-none float-start m-1 gap-[1rem]">
+              <li
+                key={`${color.id}`}
+                className="list-none float-start m-1 gap-[1rem]"
+              >
                 <button
-                  onClick={() => setActiveColor(color)}
+                  onClick={() => setSelectedColor(color)}
                   className="border-solid h-[20px] w-[20px] border-[1px] border-black rounded-full bg-[#f5f5f5]"
                   style={{
                     backgroundColor: color,
-                    outline: activeColor === color ? "2px solid red" : "",
+                    outline: selectedColor === color ? "2px solid red" : "",
                   }}
                 ></button>
               </li>
             );
           })}
         </ul>
+        <div className="flex w-full px-2 justify-center">
+          <button
+            className="py-1 px-2 border-[1.5px] rounded-md border-black border-solid"
+            onClick={() => setSelectedColor("")}
+          >
+            Reset
+          </button>
+        </div>
       </div>
     </div>
   );

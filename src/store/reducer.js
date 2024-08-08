@@ -1,6 +1,7 @@
 export const ACTION_TYPES = {
   fetch_colors: "FETCH_COLORS",
   fetch_brands: "FETCH_BRANDS",
+  fetch_products: "FETCH_PRODUCTS",
 };
 
 export const initialState = {
@@ -20,6 +21,11 @@ export default function reducer(state, action) {
       return {
         ...state,
         brands: action.payload,
+      };
+    case ACTION_TYPES.fetch_products:
+      return {
+        ...state,
+        products: action.payload,
       };
     default:
       return state;

@@ -1,9 +1,22 @@
+import { useState } from "react";
 import "./style.scss";
 
-const index = () => {
+const index = ({ setSortBy, sortBy }) => {
   return (
-    <header className="bg-sky-400  ">
-      <div className="h-[10vh] w-full mx-auto max-w-[1500px]">header</div>
+    <header>
+      <nav>
+        <div className="text-black rounded-sm">
+          <select
+            className="rounded-sm p-1 outline-none cursor-pointer"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="">none</option>
+            <option value="cheap">cheap</option>
+            <option value="expensive">expensive</option>
+          </select>
+        </div>
+      </nav>
     </header>
   );
 };
