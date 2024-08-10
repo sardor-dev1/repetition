@@ -23,14 +23,11 @@ const drawerWidth = 240;
 import Header from "../header/index";
 import Main from "../../pages/main/index";
 import Aside from "../../pages/aside";
-import { useReducer, useState } from "react";
-import reducer, { initialState } from "../../store/reducer";
-import { Context } from "../../context/Context";
+import { useState } from "react";
 
 function ResponsiveDrawer(props) {
   const [sortBy, setSortBy] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [state, dispatch] = useReducer(reducer, initialState);
   const [selectedColor, setSelectedColor] = useState("");
 
   // ----------------------------------------------------------------
@@ -55,18 +52,18 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <Toolbar sx={{fontSize: "28px", 
-        fontWeight: "bold",
-        fontFamily: "Monospace"
-      }}>Products</Toolbar>
+      <Toolbar
+        sx={{ fontSize: "28px", fontWeight: "bold", fontFamily: "Monospace" }}
+      >
+        Products
+      </Toolbar>
       <Divider />
-      <List>
-        <Aside
-          setSelectedBrand={setSelectedBrand}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-        />
-      </List>
+      <Aside
+        setSelectedBrand={setSelectedBrand}
+        selectedBrand={selectedBrand}
+        selectedColor={selectedColor}
+        setSelectedColor={setSelectedColor}
+      />
       <Divider />
     </div>
   );
@@ -74,85 +71,91 @@ function ResponsiveDrawer(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
   return (
-    <Context.Provider value={{ state, dispatch }}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          backgroundColor: "white",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Header setSortBy={setSortBy} sortBy={sortBy} />
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{
+          width: { sm: drawerWidth },
+          flexShrink: { sm: 0 },
+        }}
+        aria-label="mailbox folders"
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Drawer
+          key={"drawer"}
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onTransitionEnd={handleDrawerTransitionEnd}
+          onClose={handleDrawerClose}
+          ModalProps={{
+            keepMounted: true,
+          }}
           sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
         >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Header setSortBy={setSortBy} sortBy={sortBy} />
-          </Toolbar>
-        </AppBar>
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="mailbox folders"
-        >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Drawer
-            container={container}
-            variant="temporary"
-            open={mobileOpen}
-            onTransitionEnd={handleDrawerTransitionEnd}
-            onClose={handleDrawerClose}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-          >
-            {drawer}
-          </Drawer>
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: "none", sm: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Box>
-        <Box
-          component="main"
+          {drawer}
+        </Drawer>
+        <Drawer
+          key={"drawer2"}
+          variant="permanent"
           sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
+          open
         >
-          <Toolbar />
-          <Main
-            sortBy={sortBy}
-            selectedBrand={selectedBrand}
-            selectedColor={selectedColor}
-          />
-        </Box>
+          {drawer}
+        </Drawer>
       </Box>
-    </Context.Provider>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          backgroundColor: "#EEF2F6",
+        }}
+      >
+        <Toolbar />
+        <Main
+          sortBy={sortBy}
+          selectedBrand={selectedBrand}
+          selectedColor={selectedColor}
+        />
+      </Box>
+    </Box>
   );
 }
 

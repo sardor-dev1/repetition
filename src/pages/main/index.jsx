@@ -8,22 +8,19 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 // ----------------------------------------------------------------
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../../context/Context";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading, setError, saveProducts } from "../../store/ProductsSlice";
 
 import "./index.scss";
 export default function index({ selectedBrand, selectedColor, sortBy }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((store) => store.products);
 
-  const {
-    state: { products },
-    dispatch,
-  } = useContext(Context);
-
+ 
   useEffect(() => {
     async function fetchProducts() {
-      setLoading(true);
+      dispatch(setLoading(true));
 
       let query = `https://headphones-server.onrender.com/products`;
 
@@ -43,12 +40,12 @@ export default function index({ selectedBrand, selectedColor, sortBy }) {
 
       try {
         const response = await fetch(query);
-        const data = await response.json();
-        dispatch({ type: "FETCH_PRODUCTS", payload: data });
+        const products = await response.json();
+        dispatch(saveProducts(products));
       } catch (error) {
-        setError(error.massage);
+        dispatch(setError(error.massage));
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     }
     fetchProducts();

@@ -1,5 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../../context/Context";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  saveColors,
+  setLoading as setColorLoading,
+  setError as setColorError,
+} from "../../store/ColorSlice";
+import {
+  saveBrands,
+  setLoading as setBrandLoading,
+  setError as setBrandError,
+} from "../../store/BrandSlice";
 
 export default function index({
   selectedBrand,
@@ -7,16 +18,22 @@ export default function index({
   setSelectedColor,
   selectedColor,
 }) {
-  const [colorLoading, setColorLoading] = useState(false);
-  const [brandLoading, setBrandLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const { state, dispatch } = useContext(Context);
-  const { colors, brands } = state;
+  const dispatch = useDispatch();
+  const { colors, brands } = useSelector((store) => store);
+  const {
+    loading: colorLoading,
+    error: colorError,
+    colors: colorsList,
+  } = colors;
+  const {
+    loading: brandLoading,
+    error: brandError,
+    brands: brandsList,
+  } = brands;
 
   useEffect(() => {
     async function fetchBrands() {
-      setBrandLoading(true);
+      dispatch(setBrandLoading(true));
       try {
         const response = await fetch(
           "https://headphones-server.onrender.com/brands"
@@ -24,22 +41,17 @@ export default function index({
         if (!response.ok) {
           throw new Error("Error fetching colors");
         }
-
-        const data = await response.json();
-        dispatch({ type: "FETCH_BRANDS", payload: data });
+        const fetchedBrands = await response.json();
+        dispatch(saveBrands(fetchedBrands));
       } catch (error) {
-        setError(error.message);
+        dispatch(setBrandError(error.message));
       } finally {
-        setBrandLoading(false);
+        dispatch(setBrandLoading(false));
       }
     }
 
-    fetchBrands();
-  }, []);
-
-  useEffect(() => {
     async function fetchColors() {
-      setColorLoading(true);
+      dispatch(setColorLoading(true));
       try {
         const response = await fetch(
           "https://headphones-server.onrender.com/colors"
@@ -49,23 +61,27 @@ export default function index({
           throw new Error("Error fetching colors");
         }
 
-        const data = await response.json();
-        dispatch({ type: "FETCH_COLORS", payload: data });
+        const fetchedColors = await response.json();
+        dispatch(saveColors(fetchedColors));
       } catch (error) {
-        setError(error.message);
+        dispatch(setColorError(error.message));
       } finally {
-        setColorLoading(false);
+        dispatch(setColorLoading(false));
       }
     }
+
+    fetchBrands();
     fetchColors();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="px-3">
       <div className="border-b-2 py-3">
         <h2 className="text-center font-semibold text-[18px]">Brands</h2>
+        {brandLoading && <div>Colors Loading...</div>}
+        {brandError && <div className="text-red-500">Brands Error...</div>}
         <ul className="flex flex-col gap-1">
-          {brands?.map((brand) => (
+          {brandsList?.map((brand) => (
             <li key={`${brand.id}`} className="list-none ">
               <input
                 className="mr-1 cursor-pointer"
@@ -90,8 +106,11 @@ export default function index({
       </div>
       <div>
         <h2 className="text-center font-semibold text-[18px]">Colors</h2>
+        {colorLoading && <div>Colors Loading...</div>}
+        {colorError && <div className="text-red-500">Colors Error...</div>}
+
         <ul className="">
-          {colors.map((color) => {
+          {colorsList.map((color) => {
             return (
               <li
                 key={`${color.id}`}
