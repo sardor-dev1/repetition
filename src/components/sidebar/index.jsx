@@ -24,6 +24,7 @@ import Header from "../header/index";
 import Main from "../../pages/main/index";
 import Aside from "../../pages/aside";
 import { useState } from "react";
+import "./style.scss"
 
 function ResponsiveDrawer(props) {
   const [sortBy, setSortBy] = useState("");
@@ -84,11 +85,12 @@ function ResponsiveDrawer(props) {
       >
         <Toolbar>
           <IconButton
+        
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { sm: "none" }, backgroundColor: "#C3996B" }}
           >
             <MenuIcon />
           </IconButton>
@@ -145,6 +147,7 @@ function ResponsiveDrawer(props) {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          height: "100%",
           backgroundColor: "#EEF2F6",
         }}
       >

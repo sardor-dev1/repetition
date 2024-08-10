@@ -6,7 +6,7 @@ const index = ({ setSortBy, sortBy }) => {
       <nav>
         <div className="text-black rounded-sm">
           <select
-            className="rounded-sm p-1 outline-none cursor-pointer"
+            className="rounded-md p-1 outline-none cursor-pointer border-[1.5px] border-solid border-gray-500 "
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
           >

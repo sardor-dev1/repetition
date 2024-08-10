@@ -19,7 +19,9 @@ export default function index({
   selectedColor,
 }) {
   const dispatch = useDispatch();
-  const { colors, brands } = useSelector((store) => store);
+  const colors = useSelector((store) => store.colors);
+  const brands = useSelector((store) => store.brands);
+
   const {
     loading: colorLoading,
     error: colorError,
@@ -91,7 +93,7 @@ export default function index({
                 onChange={() => setSelectedBrand(brand)}
                 checked={selectedBrand === brand}
               />
-              <label htmlFor={brand}>{brand}</label>
+              <label className="cursor-pointer" htmlFor={brand}>{brand}</label>
             </li>
           ))}
         </ul>
