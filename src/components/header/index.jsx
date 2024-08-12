@@ -2,9 +2,14 @@ import { useState } from "react";
 import "./style.scss";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { fetchProductById } from "../../store/CartSlice";
 
 const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
   const navigate = useNavigate();
+  const carts = useSelector((state) => state.cart);
+  console.log(carts.carts.length);
+
   return (
     <header className="w-full">
       <nav className="flex justify-between items-center">
@@ -20,7 +25,8 @@ const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
           </select>
         </div>
         <div className="flex items-center gap-5">
-          <div onClick={()=>navigate("/cart")}>
+          <div className="relative" onClick={() => navigate("/cart")}>
+            <p className="text-red-700 absolute top-[-10px] left-[20px]">{carts.carts.length}</p>
             <AddShoppingCartOutlinedIcon className="text-gray-500 cursor-pointer" />
           </div>
           <input
