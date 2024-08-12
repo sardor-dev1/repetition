@@ -1,4 +1,3 @@
-// MUI
 import * as React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
@@ -7,34 +6,25 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-const drawerWidth = 240;
-
-// ----------------------------------------------------------------
 import Header from "../header/index";
-import Main from "../../pages/main/index";
 import Aside from "../../pages/aside";
 import { useState } from "react";
-import "./style.scss"
+import { Outlet } from "react-router-dom";
+import "./style.scss";
+
+const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
+  const [searchBy, setSearchBy] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-
-  // ----------------------------------------------------------------
+  
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -71,6 +61,7 @@ function ResponsiveDrawer(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -85,7 +76,6 @@ function ResponsiveDrawer(props) {
       >
         <Toolbar>
           <IconButton
-        
             color="inherit"
             aria-label="open drawer"
             edge="start"
@@ -94,7 +84,7 @@ function ResponsiveDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Header setSortBy={setSortBy} sortBy={sortBy} />
+          <Header setSortBy={setSortBy} sortBy={sortBy} searchBy={searchBy} setSearchBy={setSearchBy} />
         </Toolbar>
       </AppBar>
       <Box
@@ -105,7 +95,6 @@ function ResponsiveDrawer(props) {
         }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           key={"drawer"}
           container={container}
@@ -148,15 +137,12 @@ function ResponsiveDrawer(props) {
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           height: "100%",
+          minHeight: "100vh",
           backgroundColor: "#EEF2F6",
         }}
       >
         <Toolbar />
-        <Main
-          sortBy={sortBy}
-          selectedBrand={selectedBrand}
-          selectedColor={selectedColor}
-        />
+        <Outlet context={{ sortBy, selectedBrand, selectedColor, searchBy }} />
       </Box>
     </Box>
   );

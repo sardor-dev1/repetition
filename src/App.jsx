@@ -1,12 +1,13 @@
 import { Context } from "./context/Context";
 import ResponsiveDrawer from "./components/sidebar";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   const value = {};
 
   return (
     <Context.Provider value={value}>
-      <ResponsiveDrawer />
+      <Outlet/>
     </Context.Provider>
   );
 };
