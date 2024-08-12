@@ -21,8 +21,7 @@ export default function index() {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((store) => store.products);
   const navigate = useNavigate();
-  const product = localStorage.getItem("cart")
-  console.log(product);
+  
   
 
   useEffect(() => {
