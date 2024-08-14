@@ -8,7 +8,12 @@ const cartSlice = createSlice({
   initialState: getToLocalStorage(CART),
   reducers: {
     addItem: (state, action) => {
+      if (!Array.isArray(state)) {
+        state = [];
+      }
+
       state.push(action.payload);
+
       saveToLocalStorage(CART, state);
     },
     removeItem: (state, action) => {
