@@ -129,7 +129,10 @@ export default function index() {
               <CardActions>
                 <Button
                   onClick={() => handleAdd(p)}
-                  disabled={cart.find((item) => item.id === p.id) !== undefined}
+                  disabled={
+                    Array.isArray(cart) &&
+                    cart.find((item) => item.id === p.id) !== undefined
+                  }
                   sx={{
                     backgroundColor: "#f5f5f5",
                     outline: "2px solid green",
