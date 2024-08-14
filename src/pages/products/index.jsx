@@ -129,7 +129,7 @@ export default function index() {
               <CardActions>
                 <Button
                   onClick={() => handleAdd(p)}
-                  disabled={cart.some((item) => item.id === p.id)}
+                  disabled={cart?.some((item) => item.id === p.id)}
                   sx={{
                     backgroundColor: "#f5f5f5",
                     outline: "2px solid green",
