@@ -6,23 +6,40 @@ import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import { NotFound } from "@pages";
+import CartModal from "../../components/cart-modal";
+import RemoveAll from "../../components/remove-all-cart";
+import { useState } from "react";
+import Counter from "../../components/counter";
 
 const index = () => {
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const [allOpen, setAllOpen] = useState(false);
+  const handleAllClose = () => setAllOpen(false);
+  const [id, setId] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((store) => store.cart);
+  const counter = useSelector((store) => store.counter);
 
   const handleRemoveItem = (id) => {
     dispatch(removeItem(id));
   };
 
-  const handleRemoveAll = () => {
-    dispatch(removeAll());
+  const handleAllClick = () => {
+    setAllOpen(true);
+  };
+
+  const handleClick = (id) => {
+    setOpen(true);
+    setId(id);
   };
 
   return (
     <>
       <div>
+        <CartModal open={open} id={id} handleClose={handleClose} />
+        <RemoveAll allOpen={allOpen} handleAllClose={handleAllClose} />
         <div className="cart flex flex-col gap-[30px]">
           {cart.length == 0 ? (
             <NotFound />
@@ -39,14 +56,19 @@ const index = () => {
                     alt=""
                   />
                 </div>
-                <h3 className="text-[28px]">{item.name}</h3>
+                <div className="flex gap-2 flex-col justify-center items-center">
+                  <h3 className="text-[28px]">{item.name}</h3>
+                  <Counter />
+                </div>
                 <p className="text-red-500 text-[24px]">
-                  {item.price}
+                  {counter.count > 0
+                    ? counter.count * Math.round(item.price)
+                    : item.price}
                   <span className="text-orange-500">$</span>
                 </p>
                 <button
                   className="absolute top-4 duration-3 transition hover:scale-[1.2] right-5"
-                  onClick={() => handleRemoveItem(item.id)}
+                  onClick={() => handleClick(item.id)}
                 >
                   <Tooltip title="Delete">
                     <RemoveShoppingCartIcon />
@@ -58,9 +80,8 @@ const index = () => {
         </div>
         {cart.length > 0 ? (
           <div className="flex justify-center py-3">
-            <button></button>
             <Button
-              onClick={() => handleRemoveAll()}
+              onClick={() => handleAllClick(true)}
               variant="contained"
               color="success"
             >

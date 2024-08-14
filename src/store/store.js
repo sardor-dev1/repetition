@@ -4,6 +4,7 @@ import colorSlice from "./ColorSlice";
 import brandsSlice from "./BrandSlice";
 import ProductSingleSlice from "./ProductSingleSlice";
 import CartSlice from "./CartSlice";
+import CounterSlice from "./CounterSlice";
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     brands: brandsSlice,
     productSingle: ProductSingleSlice,
     cart: CartSlice,
+    counter: CounterSlice,
   },
 });

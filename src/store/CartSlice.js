@@ -11,7 +11,6 @@ const cartSlice = createSlice({
       if (!Array.isArray(state)) {
         state = [];
       }
-
       state.push(action.payload);
 
       saveToLocalStorage(CART, state);
