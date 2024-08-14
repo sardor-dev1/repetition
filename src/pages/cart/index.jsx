@@ -1,91 +1,76 @@
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductById } from "../../store/CartSlice";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
+import "./index.scss";
 import { useNavigate } from "react-router-dom";
-import "./index.scss"
+import { removeItem, removeAll } from "../../store/CartSlice";
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import { NotFound } from "@pages";
 
-const Index = () => {
-  const dispatch = useDispatch();
-  const { carts, loading, error } = useSelector((state) => state.cart);
+const index = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cart = useSelector((store) => store.cart);
 
-  useEffect(() => {
-    const productId = localStorage.getItem("cart");
-    if (productId) {
-      dispatch(fetchProductById(productId));
-    }
-  }, [dispatch]);
+  const handleRemoveItem = (id) => {
+    dispatch(removeItem(id));
+  };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const handleRemoveAll = () => {
+    dispatch(removeAll());
+  };
 
   return (
-    <div>
-      <div className="pb-3">
-        <button
-          className="px-2 py-1 border-solid border-[1.5px] border-black rounded-md"
-          onClick={() => navigate("/")}
-        >
-          « Back
-        </button>
-      </div>
-      <div className="products">
-        {carts.map((product) => (
-          <div className="products__card">
-            <Card key={product.id} sx={{ maxWidth: 345, boxShadow: 3 }}>
-              <CardMedia
-                component="img"
-                image={product.image_url}
-                alt={product.name}
-                sx={{
-                  objectFit: "contain",
-                  height: "240px",
-                }}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {product.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Brand: {product.brand_name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Quantity: {product.quantity}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Quantity: {product.description}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  sx={{
-                    backgroundColor: "#f5f5f5",
-                    outline: "2px solid red",
-                    color: "red",
-                    cursor: "pointer",
-                    "&:hover": {
-                      backgroundColor: "red",
-                      color: "white",
-                    },
-                  }}
-                  size="small"
-                  color="secondary"
+    <>
+      <div>
+        <div className="cart flex flex-col gap-[30px]">
+          {cart.length == 0 ? (
+            <NotFound />
+          ) : (
+            cart.map((item, index) => (
+              <div
+                key={index}
+                className="relative cart__card max-w-[800px] w-full rounded-[10px] px-6 bg-white text-black flex justify-between items-center"
+              >
+                <div className=" py-1 w-[150px]">
+                  <img
+                    className="object-contain w-full"
+                    src={item.image_url}
+                    alt=""
+                  />
+                </div>
+                <h3 className="text-[28px]">{item.name}</h3>
+                <p className="text-red-500 text-[24px]">
+                  {item.price}
+                  <span className="text-orange-500">$</span>
+                </p>
+                <button
+                  className="absolute top-4 duration-3 transition hover:scale-[1.2] right-5"
+                  onClick={() => handleRemoveItem(item.id)}
                 >
-                  Remove Cart
-                </Button>
-              </CardActions>
-            </Card>
+                  <Tooltip title="Delete">
+                    <RemoveShoppingCartIcon />
+                  </Tooltip>
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+        {cart.length > 0 ? (
+          <div className="flex justify-center py-3">
+            <button></button>
+            <Button
+              onClick={() => handleRemoveAll()}
+              variant="contained"
+              color="success"
+            >
+              Remove all
+            </Button>
           </div>
-        ))}
+        ) : null}
       </div>
-    </div>
+    </>
   );
 };
 
-export default Index;
+export default index;

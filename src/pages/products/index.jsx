@@ -13,16 +13,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setError, saveProducts } from "../../store/ProductsSlice";
 import { useNavigate } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import { addItem } from "../../store/CartSlice";
 
 import "./index.scss";
-import { useState } from "react";
 export default function index() {
   const { sortBy, selectedBrand, selectedColor, searchBy } = useOutletContext();
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((store) => store.products);
+  const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
-  
-  
+
+  function handleAdd(product) {
+    dispatch(addItem(product));
+  }
 
   useEffect(() => {
     async function fetchProducts() {
@@ -125,7 +128,8 @@ export default function index() {
 
               <CardActions>
                 <Button
-                  onClick={() => localStorage.setItem("cart", p.id)}
+                  onClick={() => handleAdd(p)}
+                  disabled={cart.some((item) => item.id === p.id)}
                   sx={{
                     backgroundColor: "#f5f5f5",
                     outline: "2px solid green",

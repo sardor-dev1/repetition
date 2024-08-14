@@ -8,11 +8,14 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+
+// ----------------------------------------------------------------
 import Header from "../header/index";
 import Aside from "../../pages/aside";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import "./style.scss";
+
 
 const drawerWidth = 240;
 
@@ -43,11 +46,13 @@ function ResponsiveDrawer(props) {
 
   const drawer = (
     <div>
-      <Toolbar
-        sx={{ fontSize: "28px", fontWeight: "bold", fontFamily: "Monospace" }}
-      >
-        Products
-      </Toolbar>
+      <Link to="/">
+        <Toolbar
+          sx={{ fontSize: "28px", fontWeight: "bold", fontFamily: "Monospace" }}
+        >
+          Products
+        </Toolbar>
+      </Link>
       <Divider />
       <Aside
         setSelectedBrand={setSelectedBrand}
