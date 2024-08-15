@@ -29,7 +29,7 @@ const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
             <Cart />
           </div>
           <div className="relative">
-            <button onClick={() => searchOpen()}>
+            <button className="block min-[730px]:hidden" onClick={() => searchOpen()}>
               <SearchIcon />
             </button>
             <input
@@ -38,7 +38,7 @@ const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
               type="text"
               placeholder="Search..."
               className={`border-solid border-gray-400 rounded-md outline-none text-black border-[1.5px] px-2 py-1 ${
-                searchVisible ? "flex absolute top-8 right-0" : "hidden"
+                searchVisible ? "flex absolute top-8 right-0" : "hidden min-[730px]:block"
               }`}
             />
           </div>

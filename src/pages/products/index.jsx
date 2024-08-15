@@ -72,7 +72,7 @@ export default function index() {
   const filteredProducts = sortedProducts.filter((product) => {
     if (
       searchBy &&
-      !product.brand_name.toLowerCase().includes(searchBy.toLowerCase())
+      !product.name.toLowerCase().includes(searchBy.toLowerCase())
     ) {
       return false;
     }
