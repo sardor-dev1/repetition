@@ -5,7 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import App from "../App";
-import { Products, Cart, SingleProduct, Main, NotFound } from "../pages/index";
+import { Products, Cart, SingleProduct, Main, Login } from "@pages";
 const Index = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -14,8 +14,9 @@ const Index = () => {
           <Route index element={<Products />} />
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/not-found"/>
+          <Route path="/not-found" />
         </Route>
+        <Route path="/login" element={<Login />} />
       </Route>
     )
   );
