@@ -12,7 +12,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 300,
   bgcolor: "background.paper",
   border: "none",
   outline: "none",
@@ -47,10 +47,10 @@ export default function index({ open, handleClose, id }) {
           </Typography>
 
           <div className="flex justify-end gap-2">
-            <Button variant="contained" onClick={handleRemoveItem}>
+            <Button variant="outlined" onClick={handleRemoveItem}>
               yes
             </Button>
-            <Button variant="contained" onClick={() => handleClose()}>
+            <Button variant="outlined" onClick={() => handleClose()}>
               Close
             </Button>
           </div>

@@ -37,17 +37,17 @@ const index = () => {
 
   return (
     <>
-      <div>
+      <div className="relative">
         <CartModal open={open} id={id} handleClose={handleClose} />
         <RemoveAll allOpen={allOpen} handleAllClose={handleAllClose} />
-        <div className="cart flex flex-col gap-[30px]">
+        <div className="cart pt-3 flex flex-col gap-[30px]">
           {cart.length == 0 ? (
             <NotFound />
           ) : (
             cart.map((item, index) => (
               <div
                 key={index}
-                className="relative cart__card max-w-[800px] w-full rounded-[10px] px-6 bg-white text-black flex justify-between items-center"
+                className="relative max-[840px]:flex-col gap-5 max-[840px]:py-3 cart__card max-w-[800px] w-full rounded-[10px] px-6 bg-white text-black flex justify-between items-center"
               >
                 <div className=" py-1 w-[150px]">
                   <img

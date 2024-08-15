@@ -3,8 +3,13 @@ import "./style.scss";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Cart from "../cart/index";
+import SearchIcon from "@mui/icons-material/Search";
 
 const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
+  const [searchVisible, setSearchVisible] = useState(false);
+  const searchOpen = () => {
+    setSearchVisible((prev) => !prev);
+  };
   return (
     <header className="w-full text-black">
       <nav className="flex justify-between items-center">
@@ -19,17 +24,24 @@ const index = ({ setSortBy, sortBy, searchBy, setSearchBy }) => {
             <option value="expensive">expensive</option>
           </select>
         </div>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center pr-2 gap-8">
           <div>
             <Cart />
           </div>
-          <input
-            onChange={(event) => setSearchBy(event.target.value)}
-            value={searchBy}
-            type="text"
-            placeholder="Search..."
-            className="border-solid border-gray-400 rounded-md outline-none text-black border-[1.5px] px-2 py-1"
-          />
+          <div className="relative">
+            <button onClick={() => searchOpen()}>
+              <SearchIcon />
+            </button>
+            <input
+              onChange={(event) => setSearchBy(event.target.value)}
+              value={searchBy}
+              type="text"
+              placeholder="Search..."
+              className={`border-solid border-gray-400 rounded-md outline-none text-black border-[1.5px] px-2 py-1 ${
+                searchVisible ? "flex absolute top-8 right-0" : "hidden"
+              }`}
+            />
+          </div>
         </div>
       </nav>
     </header>
